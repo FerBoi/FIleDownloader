@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
 public class Category {
     private String name;
     private ImageIcon icon;
-    private final List<Program> PROGRAMS = new ArrayList<>();
+    private List<Program> programs = new ArrayList<>();
 
     public Category(String name) {
         this.name = name;
@@ -28,9 +28,15 @@ public class Category {
         this.icon = icon;
     }
     
+    public Category(String name, ImageIcon icon, List<Program> programs) {
+        this.name = name;
+        this.icon = icon;
+        this.programs = programs;
+    }
+    
     public boolean addProgram(Program program) {
-        if(!PROGRAMS.contains(program)) {
-            this.PROGRAMS.add(program);
+        if(!this.programs.contains(program)) {
+            this.programs.add(program);
             return true;
         }
         
@@ -53,9 +59,14 @@ public class Category {
         this.icon = icon;
     }
 
-    public List<Program> getPROGRAMS() {
-        return PROGRAMS;
+    public List<Program> getPrograms() {
+        return programs;
     }
+
+    public void setPrograms(List<Program> programs) {
+        this.programs = programs;
+    }
+
 
     @Override
     public int hashCode() {
@@ -81,7 +92,7 @@ public class Category {
 
     @Override
     public String toString() {
-        return "Category{" + "name=" + name + ", icon=" + icon + ", PROGRAMS=" + PROGRAMS + '}';
+        return "Category{" + "name=" + name + ", icon=" + icon + ", PROGRAMS=" + programs + '}';
     }
     
 } // end Category

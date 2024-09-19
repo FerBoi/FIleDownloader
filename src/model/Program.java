@@ -6,10 +6,9 @@
 package model;
 
 import java.net.URL;
-import javax.swing.ImageIcon;
 
 /**
  *
  * @author Fernando GJ
  */
-public record Program(String name, ImageIcon normalIcon, ImageIcon selectedIcon ,URL website) {} // end Program
+public record Program(String name, URL website) {} // end Program

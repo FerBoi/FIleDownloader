@@ -6,15 +6,20 @@
 package view;
 
 import controller.Controller;
+import controller.Downloader;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import model.Category;
@@ -36,12 +41,16 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
         this.TO_DOWNLOAD = new ArrayList<>();
         this.LIST_MODEL = new DefaultListModel<>();
         
+        this.setIconImage(new ImageIcon(MainWindow.class.getResource("/src/window_icon.png")).getImage());
+        
         this.programList.setModel(this.LIST_MODEL);
+        this.downloadListBtn.addMouseListener(this);
+        this.deleteListBtn.addMouseListener(this);
         this.myList.addMouseListener(this);
-      
         
         this.returnBtm.setIcon(new ImageIcon(MainWindow.class.getResource("/src/back_arrow.png")));
         this.downloadListBtn.setIcon(new ImageIcon(MainWindow.class.getResource("/src/icon_download.png")));
+        this.deleteListBtn.setIcon(new ImageIcon(MainWindow.class.getResource("/src/icon_delete.png")));
     }
     
     public void setController(Controller controller) {
@@ -68,10 +77,13 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
         scrollPane = new javax.swing.JScrollPane();
         programList = new javax.swing.JList<>();
         downloadListBtn = new javax.swing.JButton();
+        deleteListBtn = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         myList = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Helper to Start");
+        setResizable(false);
 
         chanchingPanel.setLayout(new java.awt.CardLayout());
 
@@ -109,24 +121,32 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
 
         insideChancingPanel.setLayout(new java.awt.CardLayout());
 
-        optionPanel.setLayout(new java.awt.GridLayout());
+        optionPanel.setLayout(new java.awt.GridLayout(1, 0));
         insideChancingPanel.add(optionPanel, "card2");
 
         listPanel.setLayout(new javax.swing.BoxLayout(listPanel, javax.swing.BoxLayout.LINE_AXIS));
 
+        programList.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         programList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        programList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         programList.setPreferredSize(new java.awt.Dimension(20, 90));
         scrollPane.setViewportView(programList);
 
         listPanel.add(scrollPane);
 
+        downloadListBtn.setBorderPainted(false);
         downloadListBtn.setContentAreaFilled(false);
         downloadListBtn.setMargin(new java.awt.Insets(2, 14, 3, 20));
         listPanel.add(downloadListBtn);
+
+        deleteListBtn.setBorderPainted(false);
+        deleteListBtn.setContentAreaFilled(false);
+        deleteListBtn.setMargin(new java.awt.Insets(2, 14, 3, 20));
+        listPanel.add(deleteListBtn);
 
         insideChancingPanel.add(listPanel, "card3");
 
@@ -184,23 +204,21 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        this.insideChancingPanel.removeAll();
-        
         if (e.getSource() instanceof JLabel label) {
+            this.insideChancingPanel.removeAll();
             this.optionPanel.removeAll();
             
             for (Program program : this.controller.programCategory(label.getToolTipText())) {
-                JCheckBox checkBox = new JCheckBox(program.name(), program.normalIcon());
-                checkBox.setIcon(this.TO_DOWNLOAD.contains(program) ? program.selectedIcon() : program.normalIcon());
-
+                JCheckBox checkBox = new JCheckBox(program.name());
+                
+                if(this.TO_DOWNLOAD.contains(program))
+                    checkBox.setSelected(true);
+                
                 checkBox.addActionListener((ae) -> {
-                    checkBox.setIcon(checkBox.isSelected() ? program.selectedIcon() : program.normalIcon());
-
-                    if (checkBox.isSelected()) {
+                    if (checkBox.isSelected())
                         this.TO_DOWNLOAD.add(program);
-                    } else {
+                    else
                         this.TO_DOWNLOAD.remove(program);
-                    }
                 });
 
                 this.optionPanel.add(checkBox);
@@ -211,7 +229,9 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
 
             this.panelRefresh(this.insideChancingPanel, this.optionPanel);
             this.changePanel(this.insideChancingPanel);
-        } else {
+        } else if(e.getSource() instanceof JMenu) {
+            this.insideChancingPanel.removeAll();
+            
             if(!this.TO_DOWNLOAD.isEmpty()) {
                 this.LIST_MODEL.clear();
                 
@@ -224,15 +244,49 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
                 this.panelRefresh(this.insideChancingPanel, this.listPanel);
                 this.changePanel(this.insideChancingPanel);
             } else 
-                JOptionPane.showConfirmDialog(this, "Any program selected", "ERROR", 
+                JOptionPane.showConfirmDialog(this, "Any program in your list", "ERROR", 
                         JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+        } else {
+            JButton btnPressed = (JButton) e.getSource();
+            
+            if(btnPressed == this.downloadListBtn) {
+                JFileChooser fc = new JFileChooser(new File(".")); // jc will open in current directory
+                fc.setDialogTitle("Directory to save");
+                
+                // FileChooser conf for saving
+                fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fc.setApproveButtonText("Save");
+                fc.setAcceptAllFileFilterUsed(false);
+                
+                int result = fc.showOpenDialog(this);
+                
+                if(result == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    
+                    if(!file.exists())
+                        file.mkdir();
+                    
+                    DownloaderStatus progressDialog = new DownloaderStatus(this, true);
+                    Downloader.viewDownloadStatus = progressDialog;
+                    Downloader.downloadFiles(this.TO_DOWNLOAD, fc.getSelectedFile().getAbsolutePath());
+                    
+                    progressDialog.setLocationRelativeTo(this);
+                    progressDialog.setVisible(true);
+                }
+            } else {
+                int index = this.programList.getSelectedIndex();
+                
+                if(index != -1) {
+                    this.LIST_MODEL.removeElementAt(index);
+                    this.TO_DOWNLOAD.remove(index);
+                    
+                    if(this.TO_DOWNLOAD.isEmpty()) {
+                        this.panelRefresh(this.chanchingPanel, this.gridLayout);
+                        this.changePanel(this.chanchingPanel);
+                    }
+                }
+            }
         }
-        
-        
-
-        
-
-        
     }
 
     @Override
@@ -244,7 +298,7 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         if(e.getSource() instanceof JLabel label) 
-            label.setBackground(Color.LIGHT_GRAY);        
+            label.setBackground(Color.LIGHT_GRAY);    
     }
 
     @Override
@@ -256,6 +310,7 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel backPanel;
     private javax.swing.JPanel chanchingPanel;
+    private javax.swing.JButton deleteListBtn;
     private javax.swing.JButton downloadListBtn;
     private javax.swing.JPanel gridLayout;
     private javax.swing.JPanel insideChancingPanel;
@@ -268,6 +323,5 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JPanel secundaryPanel;
     // End of variables declaration//GEN-END:variables
-
 
 } // end MainWindow
