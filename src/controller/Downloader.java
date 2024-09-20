@@ -57,11 +57,10 @@ public class Downloader {
 
                             MUTEX.release();
                         }
-                    }
+                    }  
                     
-                    if(cancelDownload)
+                    if (cancelDownload)
                         return;
-                    
                 } catch (IOException ex) {
                     Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
                 }

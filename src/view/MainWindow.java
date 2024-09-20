@@ -20,8 +20,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import model.Category;
 import model.Program;
 
@@ -34,23 +36,66 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
     private final List<Program> TO_DOWNLOAD;
     private final DefaultListModel<String> LIST_MODEL;
     
+    private final JPopupMenu POP_UP_MENU;
+
     /** Creates new form MainWindow */
     public MainWindow() {
         initComponents();
         
         this.TO_DOWNLOAD = new ArrayList<>();
         this.LIST_MODEL = new DefaultListModel<>();
-        
-        this.setIconImage(new ImageIcon(MainWindow.class.getResource("/src/window_icon.png")).getImage());
-        
+        this.POP_UP_MENU = new JPopupMenu();
         this.programList.setModel(this.LIST_MODEL);
-        this.downloadListBtn.addMouseListener(this);
-        this.deleteListBtn.addMouseListener(this);
-        this.myList.addMouseListener(this);
+         
         
+        this.preparePopUp();
+        this.prepareIcons();
+        this.prepareMouseListener();
+    }
+    
+    private void preparePopUp() {
+        JMenuItem optionOne = new JMenuItem("Delete");
+        JMenuItem optionTwo = new JMenuItem("Delete All");
+        
+        this.POP_UP_MENU.add(optionOne);
+        this.POP_UP_MENU.add(optionTwo);
+
+        optionOne.addActionListener((e) -> {
+            int index = this.programList.getSelectedIndex();
+
+            if (index != -1) {
+                this.LIST_MODEL.removeElementAt(index);
+                this.TO_DOWNLOAD.remove(index);
+
+                if (this.TO_DOWNLOAD.isEmpty()) {
+                    this.panelRefresh(this.chanchingPanel, this.gridLayout);
+                    this.changePanel(this.chanchingPanel);
+                }
+            } else {
+                JOptionPane.showConfirmDialog(this, "Select a list item to remove", "ERROR",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        optionTwo.addActionListener((e) -> {
+            this.LIST_MODEL.removeAllElements();
+            this.TO_DOWNLOAD.removeAll(this.TO_DOWNLOAD);
+            this.panelRefresh(this.chanchingPanel, this.gridLayout);
+            this.changePanel(this.chanchingPanel);
+        });
+    }
+    
+    private void prepareIcons() {
+        this.setIconImage(new ImageIcon(MainWindow.class.getResource("/src/window_icon.png")).getImage());
         this.returnBtm.setIcon(new ImageIcon(MainWindow.class.getResource("/src/back_arrow.png")));
         this.downloadListBtn.setIcon(new ImageIcon(MainWindow.class.getResource("/src/icon_download.png")));
         this.deleteListBtn.setIcon(new ImageIcon(MainWindow.class.getResource("/src/icon_delete.png")));
+    }
+    
+    private void prepareMouseListener() {
+        this.downloadListBtn.addMouseListener(this);
+        this.deleteListBtn.addMouseListener(this);
+        this.myList.addMouseListener(this);
     }
     
     public void setController(Controller controller) {
@@ -121,7 +166,7 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
 
         insideChancingPanel.setLayout(new java.awt.CardLayout());
 
-        optionPanel.setLayout(new java.awt.GridLayout(1, 0));
+        optionPanel.setLayout(new java.awt.GridLayout(0, 3));
         insideChancingPanel.add(optionPanel, "card2");
 
         listPanel.setLayout(new javax.swing.BoxLayout(listPanel, javax.swing.BoxLayout.LINE_AXIS));
@@ -138,11 +183,13 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
 
         listPanel.add(scrollPane);
 
+        downloadListBtn.setToolTipText("Download list");
         downloadListBtn.setBorderPainted(false);
         downloadListBtn.setContentAreaFilled(false);
         downloadListBtn.setMargin(new java.awt.Insets(2, 14, 3, 20));
         listPanel.add(downloadListBtn);
 
+        deleteListBtn.setToolTipText("Delete selected element from list");
         deleteListBtn.setBorderPainted(false);
         deleteListBtn.setContentAreaFilled(false);
         deleteListBtn.setMargin(new java.awt.Insets(2, 14, 3, 20));
@@ -205,30 +252,39 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() instanceof JLabel label) {
-            this.insideChancingPanel.removeAll();
-            this.optionPanel.removeAll();
+            List<Program> categoryPrograms = this.controller.programCategory(label.getToolTipText());
             
-            for (Program program : this.controller.programCategory(label.getToolTipText())) {
-                JCheckBox checkBox = new JCheckBox(program.name());
+            if (!categoryPrograms.isEmpty()) {
+                this.insideChancingPanel.removeAll();
+                this.optionPanel.removeAll();
                 
-                if(this.TO_DOWNLOAD.contains(program))
-                    checkBox.setSelected(true);
-                
-                checkBox.addActionListener((ae) -> {
-                    if (checkBox.isSelected())
-                        this.TO_DOWNLOAD.add(program);
-                    else
-                        this.TO_DOWNLOAD.remove(program);
-                });
+                label.setBackground(this.getBackground());
 
-                this.optionPanel.add(checkBox);
-            }
+                for (Program program : categoryPrograms) {
+                    JCheckBox checkBox = new JCheckBox(program.name());
 
-            this.panelRefresh(this.chanchingPanel, this.secundaryPanel);
-            this.changePanel(this.chanchingPanel);
+                    if (this.TO_DOWNLOAD.contains(program))
+                        checkBox.setSelected(true);
 
-            this.panelRefresh(this.insideChancingPanel, this.optionPanel);
-            this.changePanel(this.insideChancingPanel);
+                    checkBox.addActionListener((ae) -> {
+                        if (checkBox.isSelected()) {
+                            this.TO_DOWNLOAD.add(program);
+                        } else {
+                            this.TO_DOWNLOAD.remove(program);
+                        }
+                    });
+
+                    this.optionPanel.add(checkBox);
+                }
+
+                this.panelRefresh(this.chanchingPanel, this.secundaryPanel);
+                this.changePanel(this.chanchingPanel);
+
+                this.panelRefresh(this.insideChancingPanel, this.optionPanel);
+                this.changePanel(this.insideChancingPanel);
+            } else
+                JOptionPane.showConfirmDialog(this, "No programs in this category", "ERROR", 
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
         } else if(e.getSource() instanceof JMenu) {
             this.insideChancingPanel.removeAll();
             
@@ -246,7 +302,7 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
             } else 
                 JOptionPane.showConfirmDialog(this, "Any program in your list", "ERROR", 
                         JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-        } else {
+        } else {           
             JButton btnPressed = (JButton) e.getSource();
             
             if(btnPressed == this.downloadListBtn) {
@@ -257,7 +313,7 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
                 fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 fc.setApproveButtonText("Save");
                 fc.setAcceptAllFileFilterUsed(false);
-                
+         
                 int result = fc.showOpenDialog(this);
                 
                 if(result == JFileChooser.APPROVE_OPTION) {
@@ -273,19 +329,8 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
                     progressDialog.setLocationRelativeTo(this);
                     progressDialog.setVisible(true);
                 }
-            } else {
-                int index = this.programList.getSelectedIndex();
-                
-                if(index != -1) {
-                    this.LIST_MODEL.removeElementAt(index);
-                    this.TO_DOWNLOAD.remove(index);
-                    
-                    if(this.TO_DOWNLOAD.isEmpty()) {
-                        this.panelRefresh(this.chanchingPanel, this.gridLayout);
-                        this.changePanel(this.chanchingPanel);
-                    }
-                }
-            }
+            } else
+                this.POP_UP_MENU.show(btnPressed, btnPressed.getWidth() / 2, btnPressed.getHeight() / 2);
         }
     }
 

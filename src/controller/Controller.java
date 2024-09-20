@@ -24,7 +24,7 @@ public class Controller {
         this.PROGRAM_CATEGORIES = new ArrayList<>();
     }
     
-    public void initialStatus() {
+    public void uploadProgramData() {
         for (Category programCategory : IncludeSoftware.baseCategories())
             this.PROGRAM_CATEGORIES.add(programCategory);
         

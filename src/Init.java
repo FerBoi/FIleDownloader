@@ -28,7 +28,7 @@ public class Init {
         Controller controller = new Controller(mainWindow);
         
         mainWindow.setController(controller);
-        controller.initialStatus();
+        controller.uploadProgramData();
         
         mainWindow.setLocationRelativeTo(null);
         mainWindow.setVisible(true);

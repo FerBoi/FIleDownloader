@@ -129,8 +129,8 @@
                   </Constraints>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                    <Property name="columns" type="int" value="0"/>
-                    <Property name="rows" type="int" value="1"/>
+                    <Property name="columns" type="int" value="3"/>
+                    <Property name="rows" type="int" value="0"/>
                   </Layout>
                 </Container>
                 <Container class="javax.swing.JPanel" name="listPanel">
@@ -178,6 +178,7 @@
                     </Container>
                     <Component class="javax.swing.JButton" name="downloadListBtn">
                       <Properties>
+                        <Property name="toolTipText" type="java.lang.String" value="Download list"/>
                         <Property name="borderPainted" type="boolean" value="false"/>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -187,6 +188,7 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="deleteListBtn">
                       <Properties>
+                        <Property name="toolTipText" type="java.lang.String" value="Delete selected element from list"/>
                         <Property name="borderPainted" type="boolean" value="false"/>
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">

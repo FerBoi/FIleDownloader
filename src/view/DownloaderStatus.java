@@ -84,7 +84,7 @@ public class DownloaderStatus extends javax.swing.JDialog implements WindowListe
             this.inputProgramName.setText(programName);
         
         this.currentProgramStatus.setValue(value);
-        this.percent.setText(value + "%");
+        this.percent.setText(value == 100 ? "COMPLETED!" : value + "%");
     }
     
     @Override

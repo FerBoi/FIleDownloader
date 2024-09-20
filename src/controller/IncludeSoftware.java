@@ -85,7 +85,7 @@ public class IncludeSoftware {
     private static List<Program> tools() {
         List<Program> tools = new ArrayList<>();
         
-        tools.add(new Program("WinRAR", convertURItoURL("https://d.winrar.es/d/101z1726775002/HW8oBMixzttrq8baNYTVMw/winrar-x64-701.exe")));
+        tools.add(new Program("WinRAR", convertURItoURL("https://d.winrar.es/d/101z1726840124/CR2dWqqb1D1PGZk8S2oMqw/winrar-x64-701.exe")));
         tools.add(new Program("Gyazo", convertURItoURL("https://files.gyazo.com/setup/Gyazo-5.6.1.exe?_ga=2.12806903.1387779997.1726774981-1004225417.1716839576")));
         tools.add(new Program("Rainmeter", convertURItoURL("https://github.com/rainmeter/rainmeter/releases/download/v4.5.20.3803/Rainmeter-4.5.20.exe")));
         tools.add(new Program("Logitech G HUB", convertURItoURL("https://download01.logi.com/web/ftp/pub/techsupport/gaming/lghub_installer.exe")));
