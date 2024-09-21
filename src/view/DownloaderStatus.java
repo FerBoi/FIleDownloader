@@ -38,11 +38,12 @@ public class DownloaderStatus extends javax.swing.JDialog implements WindowListe
         program = new javax.swing.JLabel();
         inputProgramName = new javax.swing.JLabel();
         currentProgramStatus = new javax.swing.JProgressBar();
-        percent = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         program.setText("Current Program:");
+
+        currentProgramStatus.setIndeterminate(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -53,9 +54,7 @@ public class DownloaderStatus extends javax.swing.JDialog implements WindowListe
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(currentProgramStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(percent, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                        .addGap(6, 6, 6))
+                        .addGap(86, 86, 86))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(program)
                         .addGap(18, 18, 18)
@@ -70,21 +69,16 @@ public class DownloaderStatus extends javax.swing.JDialog implements WindowListe
                     .addComponent(program)
                     .addComponent(inputProgramName, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(currentProgramStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 16, Short.MAX_VALUE)
-                    .addComponent(percent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addComponent(currentProgramStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void changeStatus(int value, String programName) {
+    public void changeStatus(String programName) {
         if(!this.inputProgramName.getText().equals(programName))
             this.inputProgramName.setText(programName);
-        
-        this.currentProgramStatus.setValue(value);
-        this.percent.setText(value == 100 ? "COMPLETED!" : value + "%");
     }
     
     @Override
@@ -131,7 +125,6 @@ public class DownloaderStatus extends javax.swing.JDialog implements WindowListe
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar currentProgramStatus;
     private javax.swing.JLabel inputProgramName;
-    private javax.swing.JLabel percent;
     private javax.swing.JLabel program;
     // End of variables declaration//GEN-END:variables
 

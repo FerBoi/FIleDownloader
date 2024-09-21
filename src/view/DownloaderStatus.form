@@ -28,9 +28,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="currentProgramStatus" min="-2" pref="227" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="percent" pref="68" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="program" min="-2" max="-2" attributes="0"/>
@@ -51,11 +49,8 @@
                   <Component id="inputProgramName" min="-2" pref="19" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="currentProgramStatus" pref="16" max="32767" attributes="0"/>
-                  <Component id="percent" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="currentProgramStatus" min="-2" pref="16" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -69,8 +64,9 @@
     <Component class="javax.swing.JLabel" name="inputProgramName">
     </Component>
     <Component class="javax.swing.JProgressBar" name="currentProgramStatus">
-    </Component>
-    <Component class="javax.swing.JLabel" name="percent">
+      <Properties>
+        <Property name="indeterminate" type="boolean" value="true"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
