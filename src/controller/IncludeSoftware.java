@@ -26,7 +26,6 @@ public class IncludeSoftware {
             new Category("Messaging", new ImageIcon(Controller.class.getResource("/src/icon_messaging.png")), messaging()),
             new Category("Gaming", new ImageIcon(Controller.class.getResource("/src/icon_gaming.png")), gaming()),
             new Category("Media", new ImageIcon(Controller.class.getResource("/src/icon_media.png")), media()),
-            new Category("Programming", new ImageIcon(Controller.class.getResource("/src/icon_programming.png")), programming()),
             new Category("Tools", new ImageIcon(Controller.class.getResource("/src/icon_tools.png")), tools())};
 
         return categories;
@@ -35,9 +34,10 @@ public class IncludeSoftware {
     private static List<Program> webBrowsers() {
         List<Program> webBrowsers = new ArrayList<>();
 
-        webBrowsers.add(new Program("Opera", convertURItoURL("https://net.geo.opera.com/opera/stable/windows?utm_tryagain=yes")));
-        webBrowsers.add(new Program("Opera GX", convertURItoURL("https://net.geo.opera.com/opera_gx/stable/windows?utm_tryagain=yes")));
-        webBrowsers.add(new Program("Firefox", convertURItoURL("https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US")));
+        webBrowsers.add(new Program("Google Chrome", convertURItoURL("https://www.snapfiles.com/downloads/googlechrome/dlgooglechrome.html")));
+        webBrowsers.add(new Program("Opera", convertURItoURL("https://www.snapfiles.com/downloads/opera/dlopera.html")));
+        webBrowsers.add(new Program("Opera GX", convertURItoURL("https://net.geo.opera.com/opera_gx/stable/windows?utm_tryagain=yes&utm_source=google&utm_medium=pa&utm_campaign=OGX_ES_Search_ES_T1_Brand_V2&utm_content=635460379197&utm_id=CjwKCAjw0aS3BhA3EiwAKaD2Zba5vRna8uxl0eUxwYR7rQ3zkeUK5krlwaQPkYY9bpPPoIBazom6axoCQHIQAvD_BwE&http_referrer=missing&utm_site=opera_com&&utm_lastpage=opera.com/gx")));
+        webBrowsers.add(new Program("Firefox", convertURItoURL("https://www.mozilla.org/es-ES/firefox/new/")));
         
         return webBrowsers;
     }
@@ -45,9 +45,7 @@ public class IncludeSoftware {
     private static List<Program> messaging() {
         List<Program> messaging = new ArrayList<>();
         
-        messaging.add(new Program("Zoom", convertURItoURL("https://zoom.us/client/6.2.0.46690/ZoomInstallerFull.exe?archType=x64")));
-        messaging.add(new Program("Discord", convertURItoURL("https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x64")));
-        messaging.add(new Program("WhatsApp", convertURItoURL("https://get.microsoft.com/installer/download/9NKSQGP7F2NH?cid=website_cta_psi")));
+        messaging.add(new Program("Discord", convertURItoURL("https://discord.com/download")));
         
         return messaging;
     }
@@ -55,8 +53,7 @@ public class IncludeSoftware {
     private static List<Program> gaming() {
         List<Program> gaming = new ArrayList<>();
         
-        gaming.add(new Program("Steam", convertURItoURL("https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe")));
-        gaming.add(new Program("Epic Games", convertURItoURL("https://launcher-public-service-prod06.ol.epicgames.com/launcher/api/installer/download/EpicGamesLauncherInstaller.msi")));
+        gaming.add(new Program("Steam", convertURItoURL("https://store.steampowered.com/about/")));
         
         return gaming;
     }
@@ -64,32 +61,21 @@ public class IncludeSoftware {
     private static List<Program> media() {
         List<Program> media = new ArrayList<>();
         
-        media.add(new Program("VLC", convertURItoURL("https://get.videolan.org/vlc/3.0.21/win64/vlc-3.0.21-win64.exe")));
-        media.add(new Program("Audacity", convertURItoURL("https://github.com/audacity/audacity/releases/download/Audacity-3.6.4/audacity-win-3.6.4-64bit.exe")));
-        media.add(new Program("Spotify", convertURItoURL("https://download.scdn.co/SpotifySetup.exe")));
+        media.add(new Program("VLC", convertURItoURL("https://www.snapfiles.com/downloads/videolan/dlvideolan.html")));
+        media.add(new Program("Audacity", convertURItoURL("https://www.audacityteam.org/download/windows/")));
+        media.add(new Program("Spotify", convertURItoURL("https://www.spotify.com/es/download/windows/")));
         
         return media;
-    }
-    
-    private static List<Program> programming() {
-        List<Program> programming = new ArrayList<>();
-        
-        programming.add(new Program("Netbeans", convertURItoURL("https://archive.apache.org/dist/netbeans/netbeans-installers/19/Apache-NetBeans-19-bin-windows-x64.exe")));
-        programming.add(new Program("IntelliJ CE", convertURItoURL("https://download.jetbrains.com/idea/ideaIC-2024.2.2.exe?_gl=1*11befhn*_gcl_au*MTA4NjIyMDQ3MC4xNzIxODE5OTM2*_ga*NTkzNTg5NTQ4LjE3MjE4MTk5Mzc.*_ga_9J976DJZ68*MTcyNjc3MzI0OC42LjEuMTcyNjc3MzU3NC41LjAuMA..")));
-        programming.add(new Program("Android Studio", convertURItoURL("https://redirector.gvt1.com/edgedl/android/studio/install/2024.1.2.13/android-studio-2024.1.2.13-windows.exe")));
-        programming.add(new Program("Visual Studio Code", convertURItoURL("https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user")));
-        
-        return programming;
     }
     
     private static List<Program> tools() {
         List<Program> tools = new ArrayList<>();
         
-        tools.add(new Program("WinRAR", convertURItoURL("https://d.winrar.es/d/101z1726840124/CR2dWqqb1D1PGZk8S2oMqw/winrar-x64-701.exe")));
-        tools.add(new Program("Gyazo", convertURItoURL("https://files.gyazo.com/setup/Gyazo-5.6.1.exe?_ga=2.12806903.1387779997.1726774981-1004225417.1716839576")));
-        tools.add(new Program("Rainmeter", convertURItoURL("https://github.com/rainmeter/rainmeter/releases/download/v4.5.20.3803/Rainmeter-4.5.20.exe")));
-        tools.add(new Program("Logitech G HUB", convertURItoURL("https://download01.logi.com/web/ftp/pub/techsupport/gaming/lghub_installer.exe")));
-        tools.add(new Program("OBS Studio", convertURItoURL("https://cdn-fastly.obsproject.com/downloads/OBS-Studio-30.2.3-Windows-Installer.exe")));
+        tools.add(new Program("WinRAR", convertURItoURL("https://www.snapfiles.com/downloads/winrar/dlwinrar.html")));
+        tools.add(new Program("Gyazo", convertURItoURL("https://gyazo.com/download")));
+        tools.add(new Program("Rainmeter", convertURItoURL("https://www.rainmeter.net")));
+        tools.add(new Program("Logitech G HUB", convertURItoURL("https://www.logitechg.com/es-es/innovation/g-hub.html?srsltid=AfmBOop-V7W_fr0_3Q5n3DyOoMoWAeUZytCvifgvAVR9A53KT4wP61vt")));
+        tools.add(new Program("OBS Studio", convertURItoURL("https://obsproject.com/es/download")));
         
         return tools;
     }
