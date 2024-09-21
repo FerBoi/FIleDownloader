@@ -40,19 +40,20 @@ public class Downloader {
         new Thread(() -> {
             for (Program program : programs) {
                 try {
-                    HttpURLConnection connection = (HttpURLConnection) program.website().openConnection();
+                    HttpURLConnection connection = (HttpURLConnection) program.getWebsite().openConnection();
                     connection.setRequestMethod("GET");
 
                     String contentType = connection.getContentType();
 
                     if (!contentType.contains("application")) {
                         connection.disconnect();
-                        URL newURL = searchingApplicationLink(program.website().toExternalForm());
-                        connection = (HttpURLConnection) newURL.openConnection();
+                        searchingApplicationLink(program);
+                        connection = (HttpURLConnection) program.getWebsite().openConnection();
                     }
 
                     if (connection != null && connection.getResponseCode() == HttpURLConnection.HTTP_OK) { // connection established correctly
-                        try (InputStream is = connection.getInputStream(); FileOutputStream fos = new FileOutputStream(savingPath + "/" + program.name().toLowerCase() + ".exe")) {
+                        try (InputStream is = connection.getInputStream(); FileOutputStream fos = new 
+        FileOutputStream(savingPath + "/" + program.getName().toLowerCase() + program.getWebsite().toExternalForm().substring(program.getWebsite().toExternalForm().lastIndexOf(".")))) {
                             byte[] buffer = new byte[4096];
                             int bytesRead = 0;
                             
@@ -65,7 +66,7 @@ public class Downloader {
 
                                 if (!cancelDownload) {
                                     fos.write(buffer, 0, bytesRead);
-                                    SwingUtilities.invokeLater(() -> viewDownloadStatus.changeStatus(program.name()));
+                                    SwingUtilities.invokeLater(() -> viewDownloadStatus.changeStatus(program.getName()));
                                 }
 
                                 MUTEX.release();
@@ -85,9 +86,9 @@ public class Downloader {
         }).start();
     }
 
-    private static URL searchingApplicationLink(String websitePath) throws IOException {
-        Document htmlContent = Jsoup.connect(websitePath).get();
-        Elements links = htmlContent.select("a[href*=exe], a[href*=msi]");
+    private static Program searchingApplicationLink(Program program) throws IOException {
+        Document htmlContent = Jsoup.connect(program.getWebsite().toExternalForm()).get();
+        Elements links = htmlContent.select("a[href*=.exe], a[href*=.msi]");
 
         if (links != null) {
             List<URI> possibleLinks = new ArrayList<>();
@@ -100,8 +101,6 @@ public class Downloader {
                     connection.setRequestMethod("HEAD");  // only obtain the header
                     String contentType = connection.getContentType();
                     
-                    // int pcArchitecture = System.getProperty("os.arch").contains("86") ? 86 : 64;
-                    
                     if(contentType != null && contentType.contains("application"))
                         possibleLinks.add(new URI(individualLink));
                 } catch (URISyntaxException e) {
@@ -113,11 +112,14 @@ public class Downloader {
                 String arch = System.getProperty("os.arch").substring(System.getProperty("os.arch").length()-2);
                 
                 for (URI possibleLink : possibleLinks) {
-                    if(possibleLink.getPath().contains(arch))
-                        return possibleLink.toURL();
+                    if(possibleLink.getPath().contains(arch)) {
+                        program.setWebsite(possibleLink.toURL());
+                        return program;
+                    }
                 }
                 
-                return possibleLinks.get(0).toURL();
+                program.setWebsite(possibleLinks.get(0).toURL());
+                return program;
             }
         }
 
