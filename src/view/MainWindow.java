@@ -261,7 +261,7 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
                 label.setBackground(this.getBackground());
 
                 for (Program program : categoryPrograms) {
-                    JCheckBox checkBox = new JCheckBox(program.name());
+                    JCheckBox checkBox = new JCheckBox(program.getName());
 
                     if (this.TO_DOWNLOAD.contains(program))
                         checkBox.setSelected(true);
@@ -292,7 +292,7 @@ public class MainWindow extends javax.swing.JFrame implements MouseListener {
                 this.LIST_MODEL.clear();
                 
                 for (Program program : this.TO_DOWNLOAD)
-                    this.LIST_MODEL.addElement(program.name());
+                    this.LIST_MODEL.addElement(program.getName());
                 
                 this.panelRefresh(this.chanchingPanel, this.secundaryPanel);
                 this.changePanel(this.chanchingPanel);
