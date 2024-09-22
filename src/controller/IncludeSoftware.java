@@ -36,7 +36,6 @@ public class IncludeSoftware {
 
         webBrowsers.add(new Program("Google Chrome", convertURItoURL("https://www.snapfiles.com/downloads/googlechrome/dlgooglechrome.html")));
         webBrowsers.add(new Program("Opera", convertURItoURL("https://www.snapfiles.com/downloads/opera/dlopera.html")));
-        webBrowsers.add(new Program("Opera GX", convertURItoURL("https://net.geo.opera.com/opera_gx/stable/windows?utm_tryagain=yes&utm_source=google&utm_medium=pa&utm_campaign=OGX_ES_Search_ES_T1_Brand_V2&utm_content=635460379197&utm_id=CjwKCAjw0aS3BhA3EiwAKaD2Zba5vRna8uxl0eUxwYR7rQ3zkeUK5krlwaQPkYY9bpPPoIBazom6axoCQHIQAvD_BwE&http_referrer=missing&utm_site=opera_com&&utm_lastpage=opera.com/gx")));
         webBrowsers.add(new Program("Firefox", convertURItoURL("https://www.mozilla.org/es-ES/firefox/new/")));
         
         return webBrowsers;
